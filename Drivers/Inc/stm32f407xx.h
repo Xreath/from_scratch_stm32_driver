@@ -130,7 +130,7 @@ typedef struct
 
 
 
-#define GPIOA 		(*(GPIO_RegDef_t *)GPIOA_BASEADDR)
+#define GPIOA 		((GPIO_RegDef_t *)GPIOA_BASEADDR)
 #define GPIOB 		((GPIO_RegDef_t *)GPIOB_BASEADDR)
 #define GPIOC 		((GPIO_RegDef_t *)GPIOC_BASEADDR)
 #define GPIOD 		((GPIO_RegDef_t *)GPIOD_BASEADDR)
