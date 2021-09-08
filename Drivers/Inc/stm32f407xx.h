@@ -49,20 +49,20 @@
 #define SPI3_BASEADDR 						(APB1_PERIPH_BASEADDR + 0x3C00)
 
 
-#define USART2_BASEADDR						(APB1PERIPH_BASEADDR + 0x4400)
-#define USART3_BASEADDR						(APB1PERIPH_BASEADDR + 0x4800)
-#define UART4_BASEADDR						(APB1PERIPH_BASEADDR + 0x4C00)
-#define UART5_BASEADDR						(APB1PERIPH_BASEADDR + 0x5000)
+#define USART2_BASEADDR						(APB1_PERIPH_BASEADDR + 0x4400)
+#define USART3_BASEADDR						(APB1_PERIPH_BASEADDR + 0x4800)
+#define UART4_BASEADDR						(APB1_PERIPH_BASEADDR + 0x4C00)
+#define UART5_BASEADDR						(APB1_PERIPH_BASEADDR + 0x5000)
 
 /*
  * Base addresses of peripherals which are hanging on APB2 bus
  * TODO : Complete for all other peripherals
  */
-#define EXTI_BASEADDR						(APB2PERIPH_BASEADDR + 0x3C00)
-#define SPI1_BASEADDR						(APB2PERIPH_BASEADDR + 0x3000)
-#define SYSCFG_BASEADDR        				(APB2PERIPH_BASEADDR + 0x3800)
-#define USART1_BASEADDR						(APB2PERIPH_BASEADDR + 0x1000)
-#define USART6_BASEADDR						(APB2PERIPH_BASEADDR + 0x1400)
+#define EXTI_BASEADDR						(APB2_PERIPH_BASEADDR + 0x3C00)
+#define SPI1_BASEADDR						(APB2_PERIPH_BASEADDR + 0x3000)
+#define SYSCFG_BASEADDR        				(APB2_PERIPH_BASEADDR + 0x3800)
+#define USART1_BASEADDR						(APB2_PERIPH_BASEADDR + 0x1000)
+#define USART6_BASEADDR						(APB2_PERIPH_BASEADDR + 0x1400)
 
 /**********************************peripheral register definition structures **********************************/
 
@@ -129,6 +129,35 @@ typedef struct
 } RCC_RegDef_t;
 
 
+/*
+ * peripheral register definition structure for EXTI
+ */
+typedef struct
+{
+	  __vo uint32_t IMR;    /*!< TODO,     										Address offset: 0x00 */
+	  __vo uint32_t EMR;    /*!< TODO,     										Address offset: 0x04 */
+	  __vo uint32_t RTSR;   /*!< TODO,     										Address offset: 0x08 */
+	  __vo uint32_t FTSR;   /*!< TODO,     										Address offset: 0x0C */
+	  __vo uint32_t SWIER;  /*!< TODO,     										Address offset: 0x10 */
+	  __vo uint32_t PR;     /*!< TODO,     										Address offset: 0x14 */
+
+} EXTI_RegDef_t;
+
+/*
+ * peripheral register definition structure for SYSCFG
+ */
+typedef struct
+{
+	__vo uint32_t MEMRMP;       /*!< Give a short description,                    Address offset: 0x00      */
+	__vo uint32_t PMC;          /*!< TODO,     									  Address offset: 0x04      */
+	__vo uint32_t EXTICR[4];    /*!< TODO , 									  Address offset: 0x08-0x14 */
+	uint32_t      RESERVED1[2];  /*!< TODO          							  Reserved, 0x18-0x1C    	*/
+	__vo uint32_t CMPCR;        /*!< TODO         								  Address offset: 0x20      */
+} SYSCFG_RegDef_t;
+
+
+
+
 
 #define GPIOA 		((GPIO_RegDef_t *)GPIOA_BASEADDR)
 #define GPIOB 		((GPIO_RegDef_t *)GPIOB_BASEADDR)
@@ -141,12 +170,16 @@ typedef struct
 #define GPIOI 		((GPIO_RegDef_t *)GPIOI_BASEADDR)
 
 #define RCC 		((RCC_RegDef_t *)RCC_BASEADDR)
+#define EXTI 		((EXTI_RegDef_t *)EXTI_BASEADDR)
+#define SYSCFG		((SYSCFG_RegDef_t *)SYSCFG_BASEADDR)
 
 
 
 /*
  * Clock enable macros
  */
+#define SYSCFG_PCLK_EN()   (RCC->APB2ENR |=(1<<14));
+
 
 #define GPIOA_PCLK_EN()   (RCC->AHB1ENR |=(1<<0));
 #define GPIOB_PCLK_EN()   (RCC->AHB1ENR |=(1<<1));
@@ -205,7 +238,15 @@ typedef struct
 #define USART6_PCCK_EN() (RCC->APB1ENR |= (1 << 5))
 
 
-
+#define GPIO_BASEADDR_TO_CODE(x)      (	(x == GPIOA)?0:\
+										(x == GPIOB)?1:\
+										(x == GPIOC)?2:\
+										(x == GPIOD)?3:\
+								        (x == GPIOE)?4:\
+								        (x == GPIOF)?5:\
+								        (x == GPIOG)?6:\
+								        (x == GPIOH)?7:\
+								        (x == GPIOI)?8:0)
 
 #define ENABLE 1
 #define DISABLE 0

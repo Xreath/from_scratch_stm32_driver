@@ -6,7 +6,7 @@
  */
 
 
-#include "stm32f407fxx_gpio_driver.h"
+#include <stm32f407xx_gpio_driver.h>
 
 
 /*********************************************************************
@@ -69,6 +69,42 @@ void GPIO_Init(GPIO_Handle_t *pGPIOHandle){
 		pGPIOHandle->pGPIOx->MODER |=temp;
 	}
 	else{
+
+		if(pGPIOHandle->GPIO_PinConfig.GPIO_PinMode==GPIO_MODE_IT_FT){
+			//1.configure the FTSR
+			EXTI->FTSR |=(1<< pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+			EXTI->RTSR &=~(1<< pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+
+		}
+		else if(pGPIOHandle->GPIO_PinConfig.GPIO_PinMode==GPIO_MODE_IT_RT){
+
+			//1.configure the RTSR
+			EXTI->RTSR |=(1<< pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+			EXTI->FTSR &=~(1<< pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+		}
+		else if(pGPIOHandle->GPIO_PinConfig.GPIO_PinMode==GPIO_MODE_IT_RFT){
+
+			//1.configure the both FTSR and RTSR
+			EXTI->RTSR |=(1<< pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+			EXTI->FTSR |=(1<< pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+		}
+
+	//2.configure the GPIO port selection in SYSCFG_EXTIRC
+
+		uint8_t temp1=pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber / 4 ;
+		uint8_t temp2=pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber % 4;
+		uint8_t portcode =GPIO_BASEADDR_TO_CODE(pGPIOHandle->pGPIOx);
+		SYSCFG_PCLK_EN();
+
+		SYSCFG->EXTICR[temp1] |=  portcode <<(4 * temp2);
+
+
+
+
+	//3.enable the EXTI interrupt delivery using IMR (interrupt mask register)
+	EXTI->IMR |= (1<< pGPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+
+
 
 	}
 
@@ -140,7 +176,7 @@ void GPIO_Write_Output_Pin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber, uint8_t Val
 
 	if(Value==GPIO_SET){pGPIOx->ODR |=(GPIO_SET << PinNumber);}
 
-	else{pGPIOx->ODR |=(GPIO_RESET << PinNumber);}
+	else{pGPIOx->ODR &=(GPIO_RESET << PinNumber);}
 
 }
 void GPIO_Write_Output_Port(GPIO_RegDef_t *pGPIOx, uint16_t Value){
@@ -168,5 +204,12 @@ void GPIO_IRQInterruptConfig(uint8_t IRQNumber,uint8_t 	IRQPriority, uint8_t Eno
 void GPIO_IRQHandling(uint8_t PinNumber){
 
 
+
+}
+
+
+void delay(void){
+
+	for (uint32_t i = 0; i < 500000/2; ++i) {};
 
 }

@@ -5,8 +5,8 @@
  *      Author: Fazli
  */
 
-#ifndef INC_STM32F407FXX_GPIO_DRIVER_H_
-#define INC_STM32F407FXX_GPIO_DRIVER_H_
+#ifndef INC_STM32F407XX_GPIO_DRIVER_H_
+#define INC_STM32F407XX_GPIO_DRIVER_H_
 
 #include "stm32f407xx.h"
 
@@ -125,6 +125,6 @@ void GPIO_Toggle_Output_Pin(GPIO_RegDef_t *pGPIOx, uint8_t PinNumber);
 void GPIO_IRQInterruptConfig(uint8_t IRQNumber,uint8_t 	IRQPriority, uint8_t EnorDi);
 void GPIO_IRQHandling(uint8_t PinNumber);
 
+void delay(void);
 
-
-#endif /* INC_STM32F407FXX_GPIO_DRIVER_H_ */
+#endif /* INC_STM32F407XX_GPIO_DRIVER_H_ */
