@@ -17,9 +17,12 @@
 int main(void)
 {
 
-	GPIO_Handle_t GpioLed, GpioLed1,GPIOBtn;
+	GPIO_Handle_t GpioLed, GpioLed1,GpioLed2,GPIOBtn;
 
 	memset(&GpioLed,0,sizeof(GpioLed));
+	memset(&GpioLed1,0,sizeof(GpioLed));
+	memset(&GpioLed2,0,sizeof(GpioLed));
+
 	memset(&GPIOBtn,0,sizeof(GpioLed));
 
 	//this is led gpio configuration
@@ -44,6 +47,17 @@ int main(void)
 	GPIO_Pclk_Ctrl(GPIOD,ENABLE);
 
 	GPIO_Init(&GpioLed1);
+
+	GpioLed2.pGPIOx = GPIOD;
+	GpioLed2.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_13;
+	GpioLed2.GPIO_PinConfig.GPIO_PinMode = GPIO_MODE_OUT;
+	GpioLed.GPIO_PinConfig.GPIO_PinSpeed = GPIO_SPEED_LOW;
+	GpioLed2.GPIO_PinConfig.GPIO_PinOPType = GPIO_OP_TYPE_PP;
+	GpioLed2.GPIO_PinConfig.GPIO_PinPuPdControl = GPIO_NO_PUPD;
+
+	GPIO_Pclk_Ctrl(GPIOD,ENABLE);
+
+	GPIO_Init(&GpioLed2);
 
 
 	//this is btn gpio configuration
@@ -72,9 +86,18 @@ int main(void)
 
 void EXTI0_IRQHandler(void)
 {
+	GPIO_Write_Output_Pin(GPIOD,GPIO_PIN_NO_15,GPIO_RESET);
 
 	GPIO_Write_Output_Pin(GPIOD,GPIO_PIN_NO_14,GPIO_SET);
-	delay(); //200ms . wait till button de-bouncing gets over
+	GPIO_Write_Output_Pin(GPIOD,GPIO_PIN_NO_13,GPIO_SET);
+	Delay(2); //200ms . wait till button de-bouncing gets over
 	GPIO_Write_Output_Pin(GPIOD,GPIO_PIN_NO_14,GPIO_RESET);
+	GPIO_Write_Output_Pin(GPIOD,GPIO_PIN_NO_13,GPIO_RESET);
+	Delay(2);
+	GPIO_Write_Output_Pin(GPIOD,GPIO_PIN_NO_14,GPIO_SET);
+	GPIO_Write_Output_Pin(GPIOD,GPIO_PIN_NO_13,GPIO_SET);
+	Delay(2); //200ms . wait till button de-bouncing gets over
+	GPIO_Write_Output_Pin(GPIOD,GPIO_PIN_NO_14,GPIO_RESET);
+	GPIO_Write_Output_Pin(GPIOD,GPIO_PIN_NO_13,GPIO_RESET);
 	GPIO_IRQHandling(GPIO_PIN_NO_0); //clear the pending event from exti line
 }

@@ -257,6 +257,6 @@ void GPIO_IRQHandling(uint8_t PinNumber)
 	}
 
 }
-void delay(void){
-	for (uint32_t i = 0; i < 500000/2; ++i) {};
+void Delay(int value){
+	for (uint32_t i = 0; i < (500000/2*value); ++i) {};
 }

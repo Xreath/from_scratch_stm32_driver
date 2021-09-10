@@ -189,6 +189,20 @@ typedef struct
 } SYSCFG_RegDef_t;
 
 
+typedef struct
+{
+	__vo uint32_t CR1;      	/*!< Give a short description,                    Address offset: 0x00      */
+	__vo uint32_t CR2;          /*!< TODO,     									  Address offset: 0x04      */
+	__vo uint32_t SR;    		/*!< TODO , 									  Address offset: 0x08 		*/
+	__vo uint32_t DR; 	 		/*!< TODO          							  	  Address offset: 0x0C   	*/
+	__vo uint32_t CRCPR;        /*!< TODO         								  Address offset: 0x10      */
+	__vo uint32_t RXCRCR;        /*!< TODO         								  Address offset: 0x14      */
+	__vo uint32_t TXCRCR;        /*!< TODO         								  Address offset: 0x18      */
+	__vo uint32_t I2SCFGR;        /*!< TODO         							  Address offset: 0x1C      */
+	__vo uint32_t I2SPR;        /*!< TODO         								  Address offset: 0x20      */
+} SPI_RegDef_t;
+
+
 
 
 
@@ -205,6 +219,11 @@ typedef struct
 #define RCC 		((RCC_RegDef_t *)RCC_BASEADDR)
 #define EXTI 		((EXTI_RegDef_t *)EXTI_BASEADDR)
 #define SYSCFG		((SYSCFG_RegDef_t *)SYSCFG_BASEADDR)
+
+#define SPI1		((SPI_RegDef_t *)SPI1_BASEADDR)
+#define SPI2		((SPI_RegDef_t *)SPI2_BASEADDR)
+#define SPI3		((SPI_RegDef_t *)SPI3_BASEADDR)
+
 
 
 
@@ -257,7 +276,7 @@ typedef struct
 #define SPI1_PCLK_EN()   (RCC->APB2ENR |=(1<<12));
 #define SPI2_PCLK_EN()   (RCC->APB1ENR |=(1<<14));
 #define SPI3_PCLK_EN()   (RCC->APB1ENR |=(1<<15));
-#define SPI4_PCLK_EN() 	 (RCC->APB2ENR |= (1 << 13))
+
 
 
 /*
@@ -293,13 +312,15 @@ typedef struct
 #define IRQ_NO_EXTI9_5		23
 #define IRQ_NO_EXTI15_10	40
 
-
-
+#define IRQ_NO_SP1 	35
+#define IRQ_NO_SP2	36
+#define IRQ_NO_SP3	51
 
 
 
 #define ENABLE 1
 #define DISABLE 0
+
 #define	SET ENABLE
 #define RESET DISABLE
 
