@@ -98,13 +98,14 @@ SPI_Config_t SPIConfig;
 /*
  * SPI Other Functions
  */
-uint8_t SPI_Get_Flag(SPI_RegDef_t *pSPIx,uint8_t FlagName);
+uint8_t SPI_Get_Flag_Status(SPI_RegDef_t *pSPIx,uint8_t FlagName);
 
 /*
  * SPI Clock Control
  */
 void SPI_Pclk_Ctrl(SPI_RegDef_t *pSPIx,uint8_t EnorDi);
 void SPI_Enable(SPI_RegDef_t *pSPIx,uint8_t EnorDi);
+void SPI_SSI_Config(SPI_RegDef_t *pSPIx,uint8_t EnorDi);
 /*
  * SPI Initialize  and De initialize
  */

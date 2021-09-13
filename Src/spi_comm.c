@@ -1,45 +1,18 @@
-/*
- * spi_comm.c
- *
- *  Created on: 13 Eyl 2021
- *      Author: samed
- */
-#include"stm32f407xx_gpio_driver.h"
-#include"stm32f407xx_spi_driver.h"
-#include <string.h>
 
-void SPI2_GPIOInits(void);
-void SPI2_Inits(void);
+#include<string.h>
+#include "stm32f407xx_gpio_driver.h"
+#include "stm32f407xx_spi_driver.h"
 
 /*
- * PB14 ---------->MISO
- * PB15  --------->MOSI
- * PB13   --------->SCLK
- * PB12   --------->NSS
- *
- * ALT FUNC. MODE =5
+ * PB14 --> SPI2_MISO
+ * PB15 --> SPI2_MOSI
+ * PB13 -> SPI2_SCLK
+ * PB12 --> SPI2_NSS
+ * ALT function mode : 5
  */
 
-int main(){
-	char user_data[] ="Merhaba Dunya" ;
-	//this function is used to initialize the GPIO pins to behave as SPI2 pins
-	SPI2_GPIOInits();
-	//This function is used to initialize the SPI2 peripheral parameters
-	SPI2_Inits();
-	//SPI ENB
-	SPI_Enable(SPI2, ENABLE);
-	//to send data
-	SPI_SendData(SPI2, (uint8_t *)user_data, sizeof(user_data));
-
-
-
-
-	return 0;
-}
-
-
-
-void SPI2_GPIOInits(void){
+void SPI2_GPIOInits(void)
+{
 	GPIO_Handle_t SPIPins;
 
 	SPIPins.pGPIOx = GPIOB;
@@ -57,51 +30,63 @@ void SPI2_GPIOInits(void){
 	SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_15;
 	GPIO_Init(&SPIPins);
 
-	//MISO  We did not use this pin
+	//MISO
 	//SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_14;
 	//GPIO_Init(&SPIPins);
 
 
-	//NSS 	We did not use this pin
+	//NSS
 	//SPIPins.GPIO_PinConfig.GPIO_PinNumber = GPIO_PIN_NO_12;
 	//GPIO_Init(&SPIPins);
 
-}
-
-void SPI2_Inits(void){
-	SPI_Handle_t SPI2Handle;
-
-	SPI2Handle.SPIConfig.SPI_BusConfig 	 = SPI_BUS_CONFIG_FD;
-	SPI2Handle.SPIConfig.SPI_CPHA        = SPI_CPHA_LOW;
-	SPI2Handle.SPIConfig.SPI_CPOL        = SPI_CPOL_LOW;
-	SPI2Handle.SPIConfig.SPI_DFF         = SPI_DFF_8BITS;
-	SPI2Handle.SPIConfig.SPI_DeviceMode  = SPI_DEVICE_MODE_MASTER;
-	SPI2Handle.SPIConfig.SPI_SSM         = SPI_SSM_EN;
-	SPI2Handle.SPIConfig.SPI_SclkSpeed   = SPI_CLCK_SPEED_PCKL_DIV_2;
-
-	SPI_Init(&SPI2Handle);
 
 }
 
+void SPI2_Inits(void)
+{
+
+	SPI_Handle_t SPI2handle;
+
+	SPI2handle.pSPIx = SPI2;
+	SPI2handle.SPIConfig.SPI_BusConfig = SPI_BUS_CONFIG_FD;
+	SPI2handle.SPIConfig.SPI_DeviceMode = SPI_DEVICE_MODE_MASTER;
+	SPI2handle.SPIConfig.SPI_SclkSpeed = SPI_CLCK_SPEED_PCKL_DIV_2;//generates sclk of 8MHz
+	SPI2handle.SPIConfig.SPI_DFF = SPI_DFF_8BITS;
+	SPI2handle.SPIConfig.SPI_CPOL = SPI_CPOL_LOW;
+	SPI2handle.SPIConfig.SPI_CPHA = SPI_CPHA_LOW;
+	SPI2handle.SPIConfig.SPI_SSM = SPI_SSM_EN; //software slave management enabled for NSS pin
+
+	SPI_Init(&SPI2handle);
+}
+
+int main(void)
+{
+	//this function is used to initialize the GPIO pins to behave as SPI2 pins
+	SPI2_GPIOInits();
+
+	//This function is used to initialize the SPI2 peripheral parameters
+	SPI2_Inits();
+
+	//this makes NSS signal internally high and avoids MODF error
+	SPI_SSI_Config(SPI2,ENABLE);
+
+	//enable the SPI2 peripheral
+	SPI_Enable(SPI2,ENABLE);
+
+	while(1){
+		char user_data[] = "Hello world";
+
+		//to send data
+		SPI_SendData(SPI2,(uint8_t*)user_data,strlen(user_data));
+
+		//lets confirm SPI is not busy
+		while(SPI_Get_Flag_Status(SPI2,SPI_FLAG_BSY));
+
+		//Disable the SPI2 peripheral
+		SPI_Enable(SPI2,DISABLE);
 
 
+	}
+	return 0;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}

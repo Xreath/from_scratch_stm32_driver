@@ -27,7 +27,6 @@
  */
 void SPI_Pclk_Ctrl(SPI_RegDef_t *pSPIx,uint8_t EnorDi){
 	if(EnorDi==ENABLE){
-
 		if(pSPIx==SPI1){
 			SPI1_PCLK_EN();
 		}
@@ -38,8 +37,6 @@ void SPI_Pclk_Ctrl(SPI_RegDef_t *pSPIx,uint8_t EnorDi){
 			SPI3_PCLK_EN();
 		}
 	}
-
-
 }
 
 
@@ -49,6 +46,16 @@ void SPI_Enable(SPI_RegDef_t *pSPIx,uint8_t EnorDi){
 	}
 	else {
 		pSPIx->CR1 &= ~(1<< SPI_CR1_SPE);
+	}
+
+}
+
+void SPI_SSI_Config(SPI_RegDef_t *pSPIx,uint8_t EnorDi){
+	if(EnorDi==ENABLE){
+		pSPIx->CR1 |= (1<< SPI_CR1_SSI);
+	}
+	else {
+		pSPIx->CR1 &= ~(1<< SPI_CR1_SSI);
 	}
 
 }
@@ -70,7 +77,7 @@ void SPI_Enable(SPI_RegDef_t *pSPIx,uint8_t EnorDi){
 /*
  * SPI Initialize  and De initialize
  */
-uint8_t SPI_Get_Flag(SPI_RegDef_t *pSPIx,uint8_t FlagName){
+uint8_t SPI_Get_Flag_Status(SPI_RegDef_t *pSPIx,uint8_t FlagName){
 
 	if(pSPIx->SR & FlagName){
 		return FLAG_SET;
@@ -143,7 +150,7 @@ void SPI_SendData(SPI_RegDef_t *pSPIx,uint8_t *TXBuffer,uint32_t len){
 while(len>0){
 
 
-	while(SPI_Get_Flag(pSPIx,SPI_FLAG_TXE)==FLAG_RESET); //Wait until tx buffer be empty
+	while(SPI_Get_Flag_Status(pSPIx,SPI_FLAG_TXE)==FLAG_RESET); //Wait until tx buffer be empty
 
 	if(pSPIx->CR1 & (1<<SPI_CR1_DFF)){
 		pSPIx->DR = *(uint16_t*)TXBuffer;
