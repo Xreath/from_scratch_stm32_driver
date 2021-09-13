@@ -94,11 +94,17 @@ SPI_Config_t SPIConfig;
  **************************** SPI FONCTIONS*************************
  */
 
+
+/*
+ * SPI Other Functions
+ */
+uint8_t SPI_Get_Flag(SPI_RegDef_t *pSPIx,uint8_t FlagName);
+
 /*
  * SPI Clock Control
  */
 void SPI_Pclk_Ctrl(SPI_RegDef_t *pSPIx,uint8_t EnorDi);
-
+void SPI_Enable(SPI_RegDef_t *pSPIx,uint8_t EnorDi);
 /*
  * SPI Initialize  and De initialize
  */
@@ -176,6 +182,26 @@ void SPI_IRQHandling(SPI_Handle_t *pSPIHandle);
 #define SPI_SR_OVR					 	6
 #define SPI_SR_BSY					 	7
 #define SPI_SR_FRE					 	8
+/*
+ * *******************************************************************************************
+ */
+
+
+/******************************************************************************************
+ *SPI peripheral Flag Name
+ ******************************************************************************************/
+
+#define SPI_FLAG_RXNE	 (1<<SPI_SR_RXNE)
+#define SPI_FLAG_TXE	 (1<<SPI_SR_TXE)
+#define SPI_FLAG_CHSIDE	 (1<<SPI_SR_CHSIDE)
+#define SPI_FLAG_UDR	 (1<<SPI_SR_UDR)
+#define SPI_FLAG_CRCERR	 (1<<SPI_SR_CRCERR)
+#define SPI_FLAG_MODF	 (1<<SPI_SR_MODF)
+#define SPI_FLAG_OVR	 (1<<SPI_SR_OVR)
+#define SPI_FLAG_BSY	 (1<<SPI_SR_BSY)
+#define SPI_FLAG_FRE	 (1<<SPI_SR_FRE)
+
+
 /*
  * *******************************************************************************************
  */

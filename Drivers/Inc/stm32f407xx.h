@@ -324,6 +324,11 @@ typedef struct
 #define	GPIO_SET ENABLE
 #define GPIO_RESET DISABLE
 
+#define FLAG_SET ENABLE
+#define FLAG_RESET DISABLE
+
+
+
 
 
 #endif /* INC_STM32F407XX_H_ */

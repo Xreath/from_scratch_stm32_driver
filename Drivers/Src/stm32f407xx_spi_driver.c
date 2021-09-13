@@ -43,6 +43,40 @@ void SPI_Pclk_Ctrl(SPI_RegDef_t *pSPIx,uint8_t EnorDi){
 }
 
 
+void SPI_Enable(SPI_RegDef_t *pSPIx,uint8_t EnorDi){
+	if(EnorDi==ENABLE){
+		pSPIx->CR1 |= (1<< SPI_CR1_SPE);
+	}
+	else {
+		pSPIx->CR1 &= ~(1<< SPI_CR1_SPE);
+	}
+
+}
+
+/*********************************************************************
+ * @fn      		  - SPI_Get_Flag
+ *
+ * @brief             -
+ *
+ * @param[in]         pSPIHandle
+ * @param[in]         -
+ * @param[in]         -
+ *
+ * @return            -
+ *
+ * @Note              -
+ */
+
+/*
+ * SPI Initialize  and De initialize
+ */
+uint8_t SPI_Get_Flag(SPI_RegDef_t *pSPIx,uint8_t FlagName){
+
+	if(pSPIx->SR & FlagName){
+		return FLAG_SET;
+	}
+	return FLAG_RESET;
+}
 
 /*********************************************************************
  * @fn      		  - SPI_Init
@@ -99,17 +133,30 @@ void SPI_DeInit(SPI_RegDef_t *pSPIx){
 	if(pSPIx==SPI1){SPI1_REG_RESET();}
 	else if(pSPIx==SPI2){SPI2_REG_RESET();}
 	else if(pSPIx==SPI3){SPI3_REG_RESET();}
-
-
 }
-
-
 
 /*
  * Data Send and Receive
  */
 void SPI_SendData(SPI_RegDef_t *pSPIx,uint8_t *TXBuffer,uint32_t len){
 
+while(len>0){
+
+
+	while(SPI_Get_Flag(pSPIx,SPI_FLAG_TXE)==FLAG_RESET); //Wait until tx buffer be empty
+
+	if(pSPIx->CR1 & (1<<SPI_CR1_DFF)){
+		pSPIx->DR = *(uint16_t*)TXBuffer;
+		len=len-2;
+		(uint16_t *)TXBuffer++;
+	}
+	else{
+		pSPIx->DR = *TXBuffer;
+		len--;
+		TXBuffer++;
+	}
+
+	}
 }
 void SPI_ReceiveData(SPI_RegDef_t *pSPIx,uint8_t *RXBuffer,uint32_t len){
 
