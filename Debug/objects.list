@@ -1,6 +1,7 @@
 "./Drivers/Src/stm32f407fxx_gpio_driver.o"
 "./Drivers/Src/stm32f407xx_spi_driver.o"
-"./Src/gpio_it_exercise.o"
+"./Drivers/Src/stm32f407xx_usart_driver.o"
 "./Src/syscalls.o"
 "./Src/sysmem.o"
+"./Src/usart.o"
 "./Startup/startup_stm32f407vgtx.o"

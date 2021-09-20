@@ -5,19 +5,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../Src/gpio_it_exercise.c \
 ../Src/syscalls.c \
-../Src/sysmem.c 
+../Src/sysmem.c \
+../Src/usart.c 
 
 OBJS += \
-./Src/gpio_it_exercise.o \
 ./Src/syscalls.o \
-./Src/sysmem.o 
+./Src/sysmem.o \
+./Src/usart.o 
 
 C_DEPS += \
-./Src/gpio_it_exercise.d \
 ./Src/syscalls.d \
-./Src/sysmem.d 
+./Src/sysmem.d \
+./Src/usart.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

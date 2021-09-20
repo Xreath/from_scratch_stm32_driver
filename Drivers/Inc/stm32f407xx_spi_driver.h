@@ -88,8 +88,8 @@ uint8_t *pTXBuffer; //To store tx buffer adresses
 uint8_t *pRXBuffer;	//To store rx buffer adresses
 uint8_t TXLenght;
 uint8_t RXLenght;
-uint8_t TXState;;
-uint8_t RXState;;
+uint8_t TXState;
+uint8_t RXState;
 
 }SPI_Handle_t;
 

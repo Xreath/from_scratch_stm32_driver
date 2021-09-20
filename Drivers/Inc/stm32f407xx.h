@@ -202,7 +202,19 @@ typedef struct
 } SPI_RegDef_t;
 
 
-
+/*
+ * peripheral register definition structure for USART
+ */
+typedef struct
+{
+	__vo uint32_t SR;         /*!< TODO,     										Address offset: 0x00 */
+	__vo uint32_t DR;         /*!< TODO,     										Address offset: 0x04 */
+	__vo uint32_t BRR;        /*!< TODO,     										Address offset: 0x08 */
+	__vo uint32_t CR1;        /*!< TODO,     										Address offset: 0x0C */
+	__vo uint32_t CR2;        /*!< TODO,     										Address offset: 0x10 */
+	__vo uint32_t CR3;        /*!< TODO,     										Address offset: 0x14 */
+	__vo uint32_t GTPR;       /*!< TODO,     										Address offset: 0x18 */
+} USART_RegDef_t;
 
 
 #define GPIOA 		((GPIO_RegDef_t *)GPIOA_BASEADDR)
@@ -223,6 +235,13 @@ typedef struct
 #define SPI2		((SPI_RegDef_t *)SPI2_BASEADDR)
 #define SPI3		((SPI_RegDef_t *)SPI3_BASEADDR)
 
+#define USART1  		((USART_RegDef_t *)USART1_BASEADDR)
+#define USART2  		((USART_RegDef_t *)USART2_BASEADDR)
+#define USART3  		((USART_RegDef_t *)USART3_BASEADDR)
+#define UART4  			((USART_RegDef_t *)UART4_BASEADDR)
+#define UART5  			((USART_RegDef_t *)UART5_BASEADDR)
+#define USART6 			((USART_RegDef_t *)USART6_BASEADDR)
+
 
 /*
  * Clock enable macros
@@ -239,23 +258,6 @@ typedef struct
 #define GPIOG_PCLK_EN()   (RCC->AHB1ENR |=(1<<6));
 #define GPIOH_PCLK_EN()   (RCC->AHB1ENR |=(1<<7));
 #define GPIOI_PCLK_EN()   (RCC->AHB1ENR |=(1<<8));
-
-
-
-/*
- *  Macros to reset GPIOx peripherals
- */
-
-#define GPIOA_REG_RESET()               do{ (RCC->AHB1RSTR |= (1 << 0)); (RCC->AHB1RSTR &= ~(1 << 0)); }while(0)
-#define GPIOB_REG_RESET()               do{ (RCC->AHB1RSTR |= (1 << 1)); (RCC->AHB1RSTR &= ~(1 << 1)); }while(0)
-#define GPIOC_REG_RESET()               do{ (RCC->AHB1RSTR |= (1 << 2)); (RCC->AHB1RSTR &= ~(1 << 2)); }while(0)
-#define GPIOD_REG_RESET()               do{ (RCC->AHB1RSTR |= (1 << 3)); (RCC->AHB1RSTR &= ~(1 << 3)); }while(0)
-#define GPIOE_REG_RESET()               do{ (RCC->AHB1RSTR |= (1 << 4)); (RCC->AHB1RSTR &= ~(1 << 4)); }while(0)
-#define GPIOF_REG_RESET()               do{ (RCC->AHB1RSTR |= (1 << 5)); (RCC->AHB1RSTR &= ~(1 << 5)); }while(0)
-#define GPIOG_REG_RESET()               do{ (RCC->AHB1RSTR |= (1 << 6)); (RCC->AHB1RSTR &= ~(1 << 6)); }while(0)
-#define GPIOH_REG_RESET()               do{ (RCC->AHB1RSTR |= (1 << 7)); (RCC->AHB1RSTR &= ~(1 << 7)); }while(0)
-#define GPIOI_REG_RESET()               do{ (RCC->AHB1RSTR |= (1 << 8)); (RCC->AHB1RSTR &= ~(1 << 8)); }while(0)
-
 
 
 /*
@@ -279,23 +281,14 @@ typedef struct
 /*
  * Clock Enable Macros for USARTx peripherals
  */
-#define USART1_PCCK_EN() (RCC->APB2ENR |= (1 << 4))
-#define USART2_PCCK_EN() (RCC->APB1ENR |= (1 << 17))
-#define USART3_PCCK_EN() (RCC->APB1ENR |= (1 << 18))
-#define UART4_PCCK_EN()  (RCC->APB1ENR |= (1 << 19))
-#define UART5_PCCK_EN()  (RCC->APB1ENR |= (1 << 20))
-#define USART6_PCCK_EN() (RCC->APB1ENR |= (1 << 5))
+#define USART1_PCLK_EN() (RCC->APB2ENR |= (1 << 4))
+#define USART2_PCLK_EN() (RCC->APB1ENR |= (1 << 17))
+#define USART3_PCLK_EN() (RCC->APB1ENR |= (1 << 18))
+#define UART4_PCLK_EN()  (RCC->APB1ENR |= (1 << 19))
+#define UART5_PCLK_EN()  (RCC->APB1ENR |= (1 << 20))
+#define USART6_PCLK_EN() (RCC->APB2ENR |= (1 << 5))
 
 
-#define GPIO_BASEADDR_TO_CODE(x)      (	(x == GPIOA)?0:\
-										(x == GPIOB)?1:\
-										(x == GPIOC)?2:\
-										(x == GPIOD)?3:\
-								        (x == GPIOE)?4:\
-								        (x == GPIOF)?5:\
-								        (x == GPIOG)?6:\
-								        (x == GPIOH)?7:\
-								        (x == GPIOI)?8:0)
 
 /*
  * IRQ(Interrupt Request) Numbers
@@ -312,6 +305,13 @@ typedef struct
 #define IRQ_NO_SPI1 	35
 #define IRQ_NO_SPI2		36
 #define IRQ_NO_SPI3		51
+
+#define IRQ_NO_USART1	37
+#define IRQ_NO_USART2	38
+#define IRQ_NO_USART3	39
+#define IRQ_NO_UART4	52
+#define IRQ_NO_UART5	53
+#define IRQ_NO_USART6	71
 
 
 
