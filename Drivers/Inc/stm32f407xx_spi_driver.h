@@ -84,43 +84,55 @@ typedef struct {
 
 SPI_RegDef_t *pSPIx; //This holds the base adress of the SPI port which the pin belongs
 SPI_Config_t SPIConfig;
+uint8_t *pTXBuffer; //To store tx buffer adresses
+uint8_t *pRXBuffer;	//To store rx buffer adresses
+uint8_t TXLenght;
+uint8_t RXLenght;
+uint8_t TXState;;
+uint8_t RXState;;
 
 }SPI_Handle_t;
 
+//SPI app. states.
+#define SPI_READY 0
+#define SPI_BUSY_IN_TX 1
+#define SPI_BUSY_IN_RX 2
 
+/*
+ * Possible SPI Application events
+ */
+#define SPI_EVENT_TX_CMPLT   1
+#define SPI_EVENT_RX_CMPLT   2
+#define SPI_EVENT_OVR_ERR    3
+#define SPI_EVENT_CRC_ERR    4
 
 
 /*
  **************************** SPI FONCTIONS*************************
  */
 
-
-/*
- * SPI Other Functions
- */
-uint8_t SPI_Get_Flag_Status(SPI_RegDef_t *pSPIx,uint8_t FlagName);
-
 /*
  * SPI Clock Control
  */
 void SPI_Pclk_Ctrl(SPI_RegDef_t *pSPIx,uint8_t EnorDi);
 void SPI_Enable(SPI_RegDef_t *pSPIx,uint8_t EnorDi);
-void SPI_SSI_Config(SPI_RegDef_t *pSPIx,uint8_t EnorDi);
+
 /*
  * SPI Initialize  and De initialize
  */
 void SPI_Init(SPI_Handle_t *pSPIHandle);
 void SPI_DeInit(SPI_RegDef_t *pSPIx);
 
-
-
 /*
- * Data Send and Receive
+ * Data Send and Receive without Interrupt
  */
 void SPI_SendData(SPI_RegDef_t *pSPIx,uint8_t *TXBuffer,uint32_t len);
 void SPI_ReceiveData(SPI_RegDef_t *pSPIx,uint8_t *RXBuffer,uint32_t len);
-
-
+/*
+ * Data Send and Receive with Interrupt
+ */
+uint8_t SPI_SendDataIT(SPI_Handle_t *pSPIHandle,uint8_t *TXBuffer,uint32_t len);
+uint8_t SPI_ReceiveDataIT(SPI_Handle_t *pSPIHandle,uint8_t *RXBuffer,uint32_t len);
 /*
  * SPI Interrupt and config
  */
@@ -128,6 +140,19 @@ void SPI_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi);
 void SPI_IRQPriorityConfig(uint8_t IRQNumber,uint32_t IRQPriority);
 void SPI_IRQHandling(SPI_Handle_t *pSPIHandle);
 
+/*
+ * Other Peripheral Control APIs
+ */
+uint8_t SPI_Get_Flag_Status(SPI_RegDef_t *pSPIx,uint8_t FlagName);
+void SPI_SSI_Config(SPI_RegDef_t *pSPIx,uint8_t EnorDi);
+void SPI_SSOEConfig(SPI_RegDef_t *pSPIx,uint8_t EnorDi);
+void SPI_CloseTransmisson(SPI_Handle_t *pSPIHandle);
+void SPI_CloseReception(SPI_Handle_t *pSPIHandle);
+
+/*
+ * Application callback
+ */
+void SPI_ApplicationEventCallback(SPI_Handle_t *pSPIHandle,uint8_t AppEv);
 
 /*
  *  Macros to reset GPIOx peripherals
