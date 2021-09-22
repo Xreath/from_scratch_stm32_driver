@@ -148,7 +148,10 @@ void USART_IRQHandling(USART_Handle_t *pHandle);
 uint8_t USART_Get_Flag_Status(USART_RegDef_t *pUSARTx,uint16_t FlagName);
 void USART_Clear_Flag(USART_RegDef_t *pUSARTx,uint16_t FlagName);
 
-
+/*
+ * Application funciton
+ */
+__attribute__((weak)) void USART_ApplicationEventCallback(USART_Handle_t *pUSARTHandle,uint8_t event);
 
 /******************************************************************************************
  *Bit position definitions of USART peripheral
