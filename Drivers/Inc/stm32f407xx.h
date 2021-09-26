@@ -217,6 +217,24 @@ typedef struct
 } USART_RegDef_t;
 
 
+/*
+ * peripheral register definition structure for I2C
+ */
+typedef struct
+{
+  __vo uint32_t CR1;        /*!< TODO,     										Address offset: 0x00 */
+  __vo uint32_t CR2;        /*!< TODO,     										Address offset: 0x04 */
+  __vo uint32_t OAR1;       /*!< TODO,     										Address offset: 0x08 */
+  __vo uint32_t OAR2;       /*!< TODO,     										Address offset: 0x0C */
+  __vo uint32_t DR;         /*!< TODO,     										Address offset: 0x10 */
+  __vo uint32_t SR1;        /*!< TODO,     										Address offset: 0x14 */
+  __vo uint32_t SR2;        /*!< TODO,     										Address offset: 0x18 */
+  __vo uint32_t CCR;        /*!< TODO,     										Address offset: 0x1C */
+  __vo uint32_t TRISE;      /*!< TODO,     										Address offset: 0x20 */
+  __vo uint32_t FLTR;       /*!< TODO,     										Address offset: 0x24 */
+}I2C_RegDef_t;
+
+
 #define GPIOA 		((GPIO_RegDef_t *)GPIOA_BASEADDR)
 #define GPIOB 		((GPIO_RegDef_t *)GPIOB_BASEADDR)
 #define GPIOC 		((GPIO_RegDef_t *)GPIOC_BASEADDR)
@@ -235,12 +253,16 @@ typedef struct
 #define SPI2		((SPI_RegDef_t *)SPI2_BASEADDR)
 #define SPI3		((SPI_RegDef_t *)SPI3_BASEADDR)
 
-#define USART1  		((USART_RegDef_t *)USART1_BASEADDR)
-#define USART2  		((USART_RegDef_t *)USART2_BASEADDR)
-#define USART3  		((USART_RegDef_t *)USART3_BASEADDR)
-#define UART4  			((USART_RegDef_t *)UART4_BASEADDR)
-#define UART5  			((USART_RegDef_t *)UART5_BASEADDR)
-#define USART6 			((USART_RegDef_t *)USART6_BASEADDR)
+#define I2C1  		((I2C_RegDef_t*)I2C1_BASEADDR)
+#define I2C2  		((I2C_RegDef_t*)I2C2_BASEADDR)
+#define I2C3  		((I2C_RegDef_t*)I2C3_BASEADDR)
+
+#define USART1  	((USART_RegDef_t *)USART1_BASEADDR)
+#define USART2  	((USART_RegDef_t *)USART2_BASEADDR)
+#define USART3  	((USART_RegDef_t *)USART3_BASEADDR)
+#define UART4  		((USART_RegDef_t *)UART4_BASEADDR)
+#define UART5  		((USART_RegDef_t *)UART5_BASEADDR)
+#define USART6 		((USART_RegDef_t *)USART6_BASEADDR)
 
 
 /*
@@ -305,6 +327,14 @@ typedef struct
 #define IRQ_NO_SPI1 	35
 #define IRQ_NO_SPI2		36
 #define IRQ_NO_SPI3		51
+
+#define IRQ_NO_I2C1_EV     31
+#define IRQ_NO_I2C1_ER     32
+#define IRQ_NO_I2C2_ER     33
+#define IRQ_NO_I2C2_EV     34
+#define IRQ_NO_I2C3_ER     72
+#define IRQ_NO_I2C3_EV     73
+
 
 #define IRQ_NO_USART1	37
 #define IRQ_NO_USART2	38

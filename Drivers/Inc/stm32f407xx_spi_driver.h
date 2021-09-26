@@ -152,7 +152,7 @@ void SPI_CloseReception(SPI_Handle_t *pSPIHandle);
 /*
  * Application callback
  */
-void SPI_ApplicationEventCallback(SPI_Handle_t *pSPIHandle,uint8_t AppEv);
+__attribute__((weak)) void SPI_ApplicationEventCallback(SPI_Handle_t *pSPIHandle,uint8_t AppEv);
 
 /*
  *  Macros to reset GPIOx peripherals

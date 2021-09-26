@@ -15,7 +15,7 @@
 
 //we have 3 different messages that we transmit to arduino
 //you can by all means add more messages
-char *msg[3] = {"hihihihihihi123\r\n", "Hello How are you ?\r\n" , "Today is Monday !\r\n"};
+uint8_t msg = 201;
 
 //reply from arduino will be stored here
 char rx_buf[1024] ;
@@ -88,7 +88,7 @@ void GPIO_ButtonInit(void)
 }
 
 int main(void)
-{	uint32_t cnt = 0;
+{	//uint32_t cnt = 0;
 
 
 
@@ -110,11 +110,13 @@ int main(void)
 		Delay(1);
 
 		// Next message index ; make sure that cnt value doesn't cross 2
-		cnt = cnt % 3;
+		//cnt = cnt % 3;
 
 		//First lets enable the reception in interrupt mode
 		//this code enables the receive interrupt
-		while ( USART_SendDataIT(&usart2_handle,(uint8_t*)msg[cnt],strlen(msg[cnt])) != USART_READY );
+
+
+		while ( USART_SendDataIT(&usart2_handle,&msg,1) != USART_READY );
 
 
     	//Now lets wait until all the bytes are received from the arduino .
@@ -125,7 +127,7 @@ int main(void)
     	rxCmplt = RESET;
 
     	//move on to next message indexed in msg[]
-    	cnt ++;
+    	//cnt ++;
     }
 
 

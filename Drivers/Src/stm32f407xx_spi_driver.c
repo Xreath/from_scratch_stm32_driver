@@ -418,7 +418,7 @@ void SPI_IRQHandling(SPI_Handle_t *pSPIHandle){
 }
 
 
- __attribute__((weak)) void SPI_ApplicationEventCallback(SPI_Handle_t *pSPIHandle,uint8_t AppEv){
-
-
-}
+// __attribute__((weak)) void SPI_ApplicationEventCallback(SPI_Handle_t *pSPIHandle,uint8_t AppEv){
+//
+//
+//}
